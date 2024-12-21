@@ -1,175 +1,90 @@
-provider "aws" {
-  region = "ap-south-1"
+resource "aws_vpc" "main" {
+  cidr_block           = "10.0.0.0/16"
+  enable_dns_hostnames = true
 }
 
-resource "aws_vpc" "javaspring_vpc" {
-  cidr_block = "10.0.0.0/16"
-
-  tags = {
-    Name = "javaspring-vpc"
-  }
+resource "aws_internet_gateway" "main" {
+  vpc_id = aws_vpc.main.id
 }
 
-resource "aws_subnet" "javaspring_subnet" {
-  count = 2
-  vpc_id                  = aws_vpc.javaspring_vpc.id
-  cidr_block              = cidrsubnet(aws_vpc.javaspring_vpc.cidr_block, 8, count.index)
-  availability_zone       = element(["ap-south-1a", "ap-south-1b"], count.index)
-  map_public_ip_on_launch = true
-
-  tags = {
-    Name = "javaspring-subnet-${count.index}"
-  }
-}
-
-resource "aws_internet_gateway" "javaspring_igw" {
-  vpc_id = aws_vpc.javaspring_vpc.id
-
-  tags = {
-    Name = "javaspring-igw"
-  }
-}
-
-resource "aws_route_table" "javaspring_route_table" {
-  vpc_id = aws_vpc.javaspring_vpc.id
+resource "aws_route_table" "main" {
+  vpc_id = aws_vpc.main.id
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.javaspring_igw.id
+    gateway_id = aws_internet_gateway.main.id
   }
 
-  tags = {
-    Name = "javaspring-route-table"
-  }
-}
-
-resource "aws_route_table_association" "a" {
-  count          = 2
-  subnet_id      = aws_subnet.javaspring_subnet[count.index].id
-  route_table_id = aws_route_table.javaspring_route_table.id
-}
-
-resource "aws_security_group" "javaspring_cluster_sg" {
-  vpc_id = aws_vpc.javaspring_vpc.id
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "javaspring-cluster-sg"
+  route {
+    cidr_block = "10.0.0.0/16"
+    gateway_id = "local"
   }
 }
 
-resource "aws_security_group" "javaspring_node_sg" {
-  vpc_id = aws_vpc.javaspring_vpc.id
-
-  ingress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "javaspring-node-sg"
-  }
+resource "aws_route_table_association" "subnet_1_association" {
+  subnet_id      = aws_subnet.subnet_1.id
+  route_table_id = aws_route_table.main.id
 }
 
-resource "aws_eks_cluster" "javaspring" {
-  name     = "javaspring-cluster"
-  role_arn = aws_iam_role.javaspring_cluster_role.arn
-
-  vpc_config {
-    subnet_ids         = aws_subnet.javaspring_subnet[*].id
-    security_group_ids = [aws_security_group.javaspring_cluster_sg.id]
-  }
+resource "aws_route_table_association" "subnet_2_association" {
+  subnet_id      = aws_subnet.subnet_2.id
+  route_table_id = aws_route_table.main.id
 }
 
-resource "aws_eks_node_group" "javaspring" {
-  cluster_name    = aws_eks_cluster.javaspring.name
-  node_group_name = "javaspring-node-group"
-  node_role_arn   = aws_iam_role.javaspring_node_group_role.arn
-  subnet_ids      = aws_subnet.javaspring_subnet[*].id
-
-  scaling_config {
-    desired_size = 2
-    max_size     = 3
-    min_size     = 1
-  }
-
-  instance_types = ["t3.medium"]
-
-  remote_access {
-    ec2_ssh_key = var.ssh_key_name
-    source_security_group_ids = [aws_security_group.javaspring_node_sg.id]
-  }
+resource "aws_route_table_association" "subnet_3_association" {
+  subnet_id      = aws_subnet.subnet_3.id
+  route_table_id = aws_route_table.main.id
 }
 
-resource "aws_iam_role" "javaspring_cluster_role" {
-  name = "javaspring-cluster-role"
+resource "aws_subnet" "subnet_1" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.1.0/24"
+  availability_zone       = "ap-south-1a"
+  map_public_ip_on_launch = true
+}
 
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "eks.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
+resource "aws_subnet" "subnet_2" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.2.0/24"
+  availability_zone       = "ap-south-1b"
+  map_public_ip_on_launch = true
+}
+
+resource "aws_subnet" "subnet_3" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.3.0/24"
+  availability_zone       = "ap-south-1c"
+  map_public_ip_on_launch = true
+}
+
+module "eks" {
+  source  = "terraform-aws-modules/eks/aws"
+  version = "~> 20.0"
+
+  cluster_name    = "eks-cluster"
+  cluster_version = "1.31"
+
+  cluster_endpoint_public_access = true
+
+  cluster_addons = {
+    coredns                = {}
+    eks-pod-identity-agent = {}
+    kube-proxy             = {}
+    vpc-cni                = {}
+  }
+
+  vpc_id                   = aws_vpc.main.id
+  subnet_ids               = [aws_subnet.subnet_1.id, aws_subnet.subnet_2.id, aws_subnet.subnet_3.id]
+  control_plane_subnet_ids = [aws_subnet.subnet_1.id, aws_subnet.subnet_2.id, aws_subnet.subnet_3.id]
+
+  eks_managed_node_groups = {
+    green = {
+      ami_type       = "AL2023_x86_64_STANDARD"
+      instance_types = ["m5.xlarge"]
+
+      min_size     = 1
+      max_size     = 1
+      desired_size = 1
     }
-  ]
-}
-EOF
-}
-
-resource "aws_iam_role_policy_attachment" "javaspring_cluster_role_policy" {
-  role       = aws_iam_role.javaspring_cluster_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-}
-
-resource "aws_iam_role" "javaspring_node_group_role" {
-  name = "javaspring-node-group-role"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "ec2.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_iam_role_policy_attachment" "javaspring_node_group_role_policy" {
-  role       = aws_iam_role.javaspring_node_group_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
-}
-
-resource "aws_iam_role_policy_attachment" "javaspring_node_group_cni_policy" {
-  role       = aws_iam_role.javaspring_node_group_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-}
-
-resource "aws_iam_role_policy_attachment" "javaspring_node_group_registry_policy" {
-  role       = aws_iam_role.javaspring_node_group_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+  }
 }
