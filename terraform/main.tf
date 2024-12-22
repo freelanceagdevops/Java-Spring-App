@@ -73,9 +73,12 @@ module "eks" {
     vpc-cni                = {}
   }
 
-  vpc_id                   = aws_vpc.main.id
-  subnet_ids               = [aws_subnet.subnet_1.id, aws_subnet.subnet_2.id, aws_subnet.subnet_3.id]
-  control_plane_subnet_ids = [aws_subnet.subnet_1.id, aws_subnet.subnet_2.id, aws_subnet.subnet_3.id]
+  vpc_id     = aws_vpc.main.id
+  subnet_ids = [
+    aws_subnet.subnet_1.id, 
+    aws_subnet.subnet_2.id, 
+    aws_subnet.subnet_3.id
+  ]
 
   eks_managed_node_groups = {
     green = {
