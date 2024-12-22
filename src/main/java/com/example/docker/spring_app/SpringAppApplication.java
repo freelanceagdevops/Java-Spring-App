@@ -19,7 +19,7 @@ public class SpringAppApplication {
         return "<h1>This is where you will see the login page</h1>";
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         SpringApplication.run(SpringAppApplication.class, args);
     }
 }
