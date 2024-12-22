@@ -65,8 +65,7 @@ module "eks" {
   cluster_version = "1.31"
 
   cluster_endpoint_public_access = true
-  manage_log_group = false
-
+  
   cluster_addons = {
     coredns                = {}
     eks-pod-identity-agent = {}
