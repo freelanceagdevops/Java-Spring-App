@@ -90,6 +90,10 @@ module "eks" {
       desired_size = 1
     }
   }
+}
 
-  manage_log_group = false  # Add this line to prevent the module from managing log groups
+# Optionally, create a CloudWatch Log Group manually if needed (only if you need it separately):
+resource "aws_cloudwatch_log_group" "eks_log_group" {
+  name = "/aws/eks/eks-cluster/cluster"
+  retention_in_days = 7
 }
