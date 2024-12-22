@@ -91,8 +91,6 @@ module "eks" {
     }
   }
 
-  # Disable log group management by the module
-  manage_log_group = false
 }
 
 
