@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class SpringAppApplication {
 
     @GetMapping("/")
-    public String home() {
+    public final String home() {
         return "Dockerizing Spring Boot Application";
     }
 
     @GetMapping("/login")
-    public String login() {
+    public final String login() {
         return "<h1>This is where you will see the login page</h1>";
     }
 
