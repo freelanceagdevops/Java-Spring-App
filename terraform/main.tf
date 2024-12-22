@@ -90,14 +90,9 @@ module "eks" {
       desired_size = 1
     }
   }
+
+  # Disable log group management by the module
+  manage_log_group = false
 }
 
-# Optionally, manually create CloudWatch Log Group if it doesn't already exist
-resource "aws_cloudwatch_log_group" "eks_log_group" {
-  name              = "/aws/eks/eks-cluster/cluster"
-  retention_in_days = 7
 
-  lifecycle {
-    ignore_changes = [name]  # Prevents Terraform from creating the log group if it already exists
-  }
-}
