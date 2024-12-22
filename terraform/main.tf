@@ -59,7 +59,7 @@ resource "aws_subnet" "subnet_3" {
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 20.0"
+  version = "~> 18.0.0"
 
   cluster_name    = "eks-cluster"
   cluster_version = "1.31"
