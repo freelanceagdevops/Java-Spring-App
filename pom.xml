@@ -48,7 +48,20 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			
+			<!-- Add SpotBugs plugin -->
+			<plugin>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<version>4.7.3.0</version> <!-- You can replace this with the latest version -->
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal> <!-- This goal will run the SpotBugs analysis -->
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
-
 </project>
