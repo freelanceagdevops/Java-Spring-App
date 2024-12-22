@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
 @RestController
-public class SpringAppApplication {
+public final class SpringAppApplication {
 
     @RequestMapping("/")
     public String home() {
