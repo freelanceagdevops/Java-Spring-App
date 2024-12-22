@@ -90,4 +90,6 @@ module "eks" {
       desired_size = 1
     }
   }
+
+  manage_log_group = false  # Add this line to prevent the module from managing log groups
 }
