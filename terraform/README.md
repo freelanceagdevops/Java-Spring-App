@@ -181,3 +181,18 @@ terraform {
     region = "ap-south-1"
   }
 }
+
+
+
+### 3.2. Initialize and Validate Infrastructure
+
+After configuring your Terraform files, follow these steps to initialize and validate your infrastructure setup.
+
+1. **Push the Code to Your GitHub Infrastructure Repository**:
+
+   Run the following commands to push your Terraform code to the GitHub repository:
+
+   ```bash
+   git add .
+   git commit -m "Initial Terraform setup for EKS"
+   git push origin main
