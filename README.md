@@ -24,8 +24,8 @@ Unzip the contents of the zip file and copy them over to the EC2 instance using 
 
 Install the pre-requisites packages on the EC2 instance using the below commands
 
-sudo apt update -y ===========> Update the machine
-sudo apt install openjdk-17-jdk -y ===========> Install java version 17
+sudo apt update -y ===========> Update the machine;
+sudo apt install openjdk-17-jdk -y ===========> Install java version 17;
 sudo java -version ===========> Validate the installed java version
 sudo apt install maven -y ===========> Install maven
 sudo mvn --version ===========> Validate the installed maven version
