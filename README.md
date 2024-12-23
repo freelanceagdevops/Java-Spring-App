@@ -26,4 +26,4 @@ Install the pre-requisites packages on the EC2 instance using the below commands
 
 sudo apt update -y
 sudo apt install openjdk-17-jdk -y
-
+sudo java -version
