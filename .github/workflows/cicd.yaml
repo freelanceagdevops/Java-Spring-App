@@ -1,4 +1,5 @@
 # CI/CD for Setup AWS infra with Terraform and Java Spring Application
+# Updated CI and created infrastructure on AWS and updated helm chart.
 
 name: CI/CD Pipeline
 
