@@ -53,11 +53,22 @@ Once you have the pre-requisites, go inside the `app` directory and run the comm
 Create a Dockerfile and Docker image. Using this Dockerfile, create a container for a Java Spring application.
 
 Docker file :
-FROM openjdk:18
+
+# Use an official OpenJDK runtime as a parent image
+FROM openjdk:11-jre-slim
+
+# Set the working directory in the container
 WORKDIR /app
-COPY ./target/spring-app-0.0.1-SNAPSHOT.jar /app
+
+# Copy the packaged JAR file into the container
+COPY target/your-app.jar /app/your-app.jar
+
+# Run the JAR file
+ENTRYPOINT ["java", "-jar", "/app/your-app.jar"]
+
+# Expose the port your app runs on (if needed)
 EXPOSE 8080
-CMD ["java", "-jar", "spring-app-0.0.1-SNAPSHOT.jar"] 
+
 
 - `sudo docker image ls`
 - `sudo docker build -t spring_app` .
