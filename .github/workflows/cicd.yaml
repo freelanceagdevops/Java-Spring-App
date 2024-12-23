@@ -133,10 +133,12 @@ jobs:
           sed -i 's/tag: .*/tag: "${{ github.run_id }}"/' helm/java-spring-app-chart/values.yaml
 
       - name: Commit and Push Changes
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           git config --global user.email "freelanceagdevops@gmail.com"
           git config --global user.name "freelanceagdevops"
-          git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/freelanceagdevops/Java-Spring-App.git
+          git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/freelanceagdevops/Java-Spring-App.git
           git add helm/java-spring-app-chart/values.yaml
-          git commit -m "Update Helm chart with tag ${{ github.run_id }}"
+          git diff --cached --exit-code || git commit -m "Update Helm chart with tag ${{ github.run_id }}"
           git push
