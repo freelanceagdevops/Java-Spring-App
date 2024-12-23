@@ -25,3 +25,5 @@ Unzip the contents of the zip file and copy them over to the EC2 instance using 
 Install the pre-requisites packages on the EC2 instance using the below commands
 
 sudo apt update -y
+sudo apt install openjdk-17-jdk -y
+
