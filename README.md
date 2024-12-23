@@ -77,8 +77,8 @@ EXPOSE 8080
 - `sudo docker ps`
 
 
-####################################################################################################################################
+##########################################################################################################
 
-
+CICD Implementation: Automate Infrastructure Creation with Terraform & GitHub Actions, and Application Deployment on EKS Cluster
 
 
