@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Main application class for the Spring Boot application.
  * <p>
- * This class is responsible for running the Spring Boot application and contains
- * REST endpoints for the home page and login page.
+ * This class is responsible for running the Spring Boot application
+ * and contains REST endpoints for the home page and login page.
  * </p>
  */
 @SpringBootApplication
@@ -19,8 +19,8 @@ public class SpringAppApplication {
     /**
      * Handles GET requests to the root URL ("/").
      * <p>
-     * This method returns a simple string message indicating that the application
-     * has been Dockerized.
+     * This method returns a simple string message indicating that the
+     * application has been Dockerized.
      * </p>
      * 
      * @return A string message "Dockerizing Spring Boot Application".
@@ -33,8 +33,8 @@ public class SpringAppApplication {
     /**
      * Handles GET requests to the "/login" URL.
      * <p>
-     * This method returns a simple HTML string that represents the login page
-     * placeholder.
+     * This method returns a simple HTML string that represents the
+     * login page placeholder.
      * </p>
      * 
      * @return A string containing HTML for a login page placeholder.
