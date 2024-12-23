@@ -93,4 +93,13 @@ This guide provides a comprehensive walkthrough for setting up a GitOps workflow
 - **kubectl** installed for Kubernetes cluster management.
 
 
+###########################################################################################################
+
+## Step 1: Create GitHub Repositories
+
+### 1.1. Create Infrastructure Repository
+- Create a GitHub repository called **infrastructure** to store Terraform configurations.  
+- Initialize the repository with a `README.md` file.
+
+
 
