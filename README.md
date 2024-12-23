@@ -37,6 +37,8 @@ Run the following commands one by one to set up the EC2 instance:
 
 - 
 #####################################################################################################
+
+
 Once you have the pre-requisites, go inside the `app` directory and run the command below:
 
 - `cd app` ===========> Navigate to the app directory
