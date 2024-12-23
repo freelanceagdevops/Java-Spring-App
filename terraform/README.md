@@ -192,7 +192,6 @@ After configuring your Terraform files, follow these steps to initialize and val
 
    Run the following commands to push your Terraform code to the GitHub repository:
 
-   ```bash
    git add .
    git commit -m "Initial Terraform setup for EKS"
    git push origin main
