@@ -146,3 +146,38 @@ module "eks" {
     }
   }
 }
+
+
+### 3.3. `provider.tf` (Specifies the AWS Provider)
+
+The `provider.tf` file is used to configure the AWS provider and specify the region for deploying resources. Below is the configuration:
+
+```hcl
+# Specify the required provider for AWS
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
+# Configure the AWS provider with the desired region
+provider "aws" {
+  region = "ap-south-1"
+}
+
+
+### 3.4. `backend.tf
+
+The `backend.tf` file configures the backend for storing the Terraform state remotely. In this case, it uses an S3 bucket to store the state file. Below is the configuration:
+
+```hcl
+terraform {
+  backend "s3" {
+    bucket = "java-terraform-s3-bucket"
+    key    = "key/terraform.tfstate"
+    region = "ap-south-1"
+  }
+}
