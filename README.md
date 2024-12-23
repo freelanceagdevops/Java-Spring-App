@@ -34,6 +34,8 @@ Run the following commands one by one to set up the EC2 instance:
 - `sudo apt install docker.io -y` ===========> Install Docker
 - `sudo docker --version` ===========> Verify Docker installation
 - `sudo service docker status` ===========> Check Docker service status
+
+- 
 #####################################################################################################
 Once you have the pre-requisites, go inside the `app` directory and run the command below:
 
