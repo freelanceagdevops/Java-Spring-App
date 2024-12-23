@@ -101,5 +101,19 @@ This guide provides a comprehensive walkthrough for setting up a GitOps workflow
 - Create a GitHub repository called **infrastructure** to store Terraform configurations.  
 - Initialize the repository with a `README.md` file.
 
+###########################################################################################################
+
+## Step 2: Configure GitHub Secrets
+
+### 2.1. GitHub Secrets Setup
+To authenticate GitHub Actions with AWS for infrastructure deployment:
+
+1. Go to your **Infrastructure Repository** in GitHub.
+2. Navigate to **Settings > Secrets and variables > Actions**.
+3. Add the following secrets:
+   - **AWS_ACCESS_KEY_ID**
+   - **AWS_SECRET_ACCESS_KEY**
+
+These secrets are necessary for AWS authentication when GitHub Actions runs the Terraform configuration.
 
 
