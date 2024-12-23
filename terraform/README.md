@@ -169,7 +169,7 @@ provider "aws" {
 }
 
 
-### **`backend.tf` (Configure Remote Backend with S3)**
+### `backend.tf` (Configure Remote Backend with S3)
 
 The `backend.tf` file configures the backend for storing the Terraform state remotely. In this case, it uses an S3 bucket to store the state file. Below is the configuration:
 
