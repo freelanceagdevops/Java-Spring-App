@@ -81,7 +81,8 @@ EXPOSE 8080
 
 # Access java application 
 
-- `The server will start on port 8080. You can access it by navigating to http://localhost:8080
+- `The application will start on port 8080. You can access it by navigating to http://localhost:8080
+
 
 
 
