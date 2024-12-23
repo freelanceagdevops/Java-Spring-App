@@ -184,7 +184,7 @@ terraform {
 
 
 
-### 3.2. Initialize and Validate Infrastructure
+### **3.2. Initialize and Validate Infrastructure**
 
 After configuring your Terraform files, follow these steps to initialize and validate your infrastructure setup.
 
