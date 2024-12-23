@@ -8,7 +8,7 @@ image:
   repository: agadhave/spring_app
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "12468537059"
+  tag: "12471952349"
 
 ingress:
   enabled: false
