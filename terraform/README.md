@@ -148,7 +148,7 @@ module "eks" {
 }
 
 
-### **`provider.tf` (Specifies the AWS Provider)**
+### `provider.tf` (Specifies the AWS Provider)
 
 The `provider.tf` file is used to configure the AWS provider and specify the region for deploying resources. Below is the configuration:
 
