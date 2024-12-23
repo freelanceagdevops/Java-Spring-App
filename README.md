@@ -25,10 +25,3 @@ Unzip the contents of the zip file and copy them over to the EC2 instance using 
 Install the pre-requisites packages on the EC2 instance using the below commands
 
 sudo apt update -y
-sudo apt install openjdk-17-jdk
-sudo java -version
-sudo apt install maven
-sudo mvn --version
-sudo apt install docker.io -y
-sudo docker --version
-sudo service docker status
