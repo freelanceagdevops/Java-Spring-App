@@ -43,4 +43,11 @@ Once you have the pre-requisites, go inside the `app` directory and run the comm
 
 - `cd app` ===========> Navigate to the app directory
 - `mvn clean install` ===========> Build the application
+- `mvn clean compile`
+- `mvn spring-boot:run`
+- `mvn clean package`
+
+#####################################################################################################
+
+
 
