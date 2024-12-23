@@ -22,7 +22,7 @@ public class SpringAppApplication {
      * This method returns a simple string message indicating that the
      * application has been Dockerized.
      * </p>
-     * 
+     *
      * @return A string message "Dockerizing Spring Boot Application".
      */
     @GetMapping("/")
@@ -36,7 +36,7 @@ public class SpringAppApplication {
      * This method returns a simple HTML string that represents the
      * login page placeholder.
      * </p>
-     * 
+     *
      * @return A string containing HTML for a login page placeholder.
      */
     @GetMapping("/login")
@@ -49,7 +49,7 @@ public class SpringAppApplication {
      * <p>
      * This method starts the Spring Boot application.
      * </p>
-     * 
+     *
      * @param args Command-line arguments passed to the application.
      */
     public static void main(final String[] args) {
