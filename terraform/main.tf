@@ -114,6 +114,9 @@ resource "null_resource" "helm_deploy" {
       # Ensure Helm binary is executable (use sudo to change permissions)
       sudo chmod +x /usr/local/bin/helm
 
+      # Explicitly add /usr/local/bin to the PATH for the current session
+      export PATH=$PATH:/usr/local/bin
+
       # Print the PATH to debug if Helm is not found
       echo "PATH: $PATH"
 
@@ -123,11 +126,8 @@ resource "null_resource" "helm_deploy" {
         exit 1
       fi
 
-      # Explicitly add /usr/local/bin to the PATH for the current session
-      export PATH=$PATH:/usr/local/bin
-
       # Verify Helm version again to ensure it’s accessible in the current environment
-      helm version
+      /usr/local/bin/helm version
 
       # Update kubeconfig for the EKS cluster
       aws eks update-kubeconfig --region ap-south-1 --name eks-cluster
