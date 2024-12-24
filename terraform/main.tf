@@ -57,7 +57,6 @@ resource "aws_subnet" "subnet_3" {
   map_public_ip_on_launch = true
 }
 
-
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 20.0"
@@ -90,6 +89,22 @@ module "eks" {
       max_size     = 1
       desired_size = 1
 
+      # User data to install Helm on the EKS node
+      user_data = <<-EOT
+        #!/bin/bash
+        # Update system and install dependencies
+        yum update -y
+        yum install -y curl
+
+        # Install Helm
+        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | sudo bash
+
+        # Ensure Helm is executable and in the path
+        sudo chmod +x /usr/local/bin/helm
+
+        # Verify Helm installation
+        helm version
+      EOT
     }
   }
 }
