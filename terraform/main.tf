@@ -57,6 +57,11 @@ resource "aws_subnet" "subnet_3" {
   map_public_ip_on_launch = true
 }
 
+resource "aws_key_pair" "java_spring_app" {
+  key_name   = "Java-Spring-App"
+  public_key = file("<path_to_your_public_key>")  # Provide the path to your public key (.pub file)
+}
+
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 20.0"
@@ -102,6 +107,8 @@ resource "null_resource" "helm_deploy" {
       then
         echo "Helm not found. Installing Helm..."
         curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+        # Ensure that Helm is added to the PATH after installation
+        export PATH=$PATH:/usr/local/bin
       fi
 
       # Update kubeconfig for the EKS cluster and deploy the Helm chart
