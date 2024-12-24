@@ -121,10 +121,13 @@ Go to your Infrastructure Repository in GitHub.
 ###########################################################################################################
 
 Step 3: Configure Terraform for EKS Setup
+
 3.1. Create Terraform Files
 In the Infrastructure Repository, create the following Terraform files:
 
-main.tf (Terraform Configuration for EKS)
+- `main.tf (Terraform Configuration for EKS)`
+- `provider.tf`
+- `backend.tf`
 
 
 
