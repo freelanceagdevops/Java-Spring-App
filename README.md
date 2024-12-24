@@ -110,11 +110,11 @@ Step 2: Configure GitHub Secrets
 To authenticate GitHub Actions with AWS for infrastructure deployment:
 
 Go to your Infrastructure Repository in GitHub.
-Navigate to Settings > Secrets and variables > Actions.
-Add the following secrets:
-AWS_ACCESS_KEY_ID
-AWS_SECRET_ACCESS_KEY
-These secrets are necessary for AWS authentication when GitHub Actions runs the Terraform configuration.
+- `Navigate to Settings > Secrets and variables > Actions`.
+- `Add the following secrets:`
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+- `These secrets are necessary for AWS authentication when GitHub Actions runs the Terraform configuration.`
 
 ###########################################################################################################
 
