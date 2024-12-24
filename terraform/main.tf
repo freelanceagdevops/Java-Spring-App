@@ -130,14 +130,14 @@ resource "null_resource" "helm_deploy" {
         fi
 
         # Verify Helm version
-        helm version
+        /usr/local/bin/helm version
 
         # Update kubeconfig for the EKS cluster
         aws eks update-kubeconfig --region *** --name eks-cluster
 
         # Use full path for helm to avoid PATH issues
-        /usr/local/bin/helm dependency update ./helm &&
-        /usr/local/bin/helm upgrade --install java-spring-app ./helm --namespace default --create-namespace
+        /usr/local/bin/helm dependency update ./helm-chart &&
+        /usr/local/bin/helm upgrade --install java-spring-app ./helm-chart --namespace default --create-namespace
       '
     EOT
   }
