@@ -12,7 +12,6 @@ on:
       - main
 
 jobs:
-
   terraform:
     name: Apply Terraform
     runs-on: ubuntu-latest
