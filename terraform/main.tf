@@ -103,14 +103,22 @@ resource "null_resource" "helm_deploy" {
       then
         echo "Helm not found. Installing Helm..."
         curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-        # Ensure that Helm is added to the PATH after installation
+        # Ensure that Helm is installed in the correct location
+        HELM_PATH=/usr/local/bin/helm
+        if [ ! -f "$HELM_PATH" ]; then
+          echo "Error: Helm was not installed properly at $HELM_PATH"
+          exit 1
+        fi
+        # Add Helm to PATH permanently
         export PATH=$PATH:/usr/local/bin
       fi
 
       # Update kubeconfig for the EKS cluster and deploy the Helm chart
       aws eks update-kubeconfig --region ap-south-1 --name eks-cluster &&
-      helm dependency update ./helm &&
-      helm upgrade --install java-spring-app ./helm --namespace default --create-namespace
+      
+      # Use full path to helm to avoid any PATH issues
+      /usr/local/bin/helm dependency update ./helm &&
+      /usr/local/bin/helm upgrade --install java-spring-app ./helm --namespace default --create-namespace
     EOT
   }
 
