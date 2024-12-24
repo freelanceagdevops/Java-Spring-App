@@ -117,7 +117,7 @@ resource "null_resource" "helm_deploy" {
         sudo chmod +x /usr/local/bin/helm
 
         # Explicitly add /usr/local/bin to the PATH for the current session
-        export PATH=$PATH:/usr/local/bin
+        export PATH="/usr/local/bin:$PATH"
 
         # Print the PATH to debug if Helm is not found
         echo "PATH: $PATH"
