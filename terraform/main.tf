@@ -1,110 +1,19 @@
-resource "aws_vpc" "main" {
-  cidr_block           = "10.0.0.0/16"
-  enable_dns_hostnames = true
-}
-
-resource "aws_internet_gateway" "main" {
-  vpc_id = aws_vpc.main.id
-}
-
-resource "aws_route_table" "main" {
-  vpc_id = aws_vpc.main.id
-
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.main.id
-  }
-
-  route {
-    cidr_block = "10.0.0.0/16"
-    gateway_id = "local"
-  }
-}
-
-resource "aws_route_table_association" "subnet_1_association" {
-  subnet_id      = aws_subnet.subnet_1.id
-  route_table_id = aws_route_table.main.id
-}
-
-resource "aws_route_table_association" "subnet_2_association" {
-  subnet_id      = aws_subnet.subnet_2.id
-  route_table_id = aws_route_table.main.id
-}
-
-resource "aws_route_table_association" "subnet_3_association" {
-  subnet_id      = aws_subnet.subnet_3.id
-  route_table_id = aws_route_table.main.id
-}
-
-resource "aws_subnet" "subnet_1" {
-  vpc_id                  = aws_vpc.main.id
-  cidr_block              = "10.0.1.0/24"
-  availability_zone       = "ap-south-1a"
-  map_public_ip_on_launch = true
-}
-
-resource "aws_subnet" "subnet_2" {
-  vpc_id                  = aws_vpc.main.id
-  cidr_block              = "10.0.2.0/24"
-  availability_zone       = "ap-south-1b"
-  map_public_ip_on_launch = true
-}
-
-resource "aws_subnet" "subnet_3" {
-  vpc_id                  = aws_vpc.main.id
-  cidr_block              = "10.0.3.0/24"
-  availability_zone       = "ap-south-1c"
-  map_public_ip_on_launch = true
+module "vpc" {
+  source          = "./modules/vpc"
+  cidr_block      = "10.0.0.0/16"
+  subnet_1_cidr   = "10.0.1.0/24"
+  subnet_2_cidr   = "10.0.2.0/24"
+  subnet_3_cidr   = "10.0.3.0/24"
+  subnet_1_az     = "ap-south-1a"
+  subnet_2_az     = "ap-south-1b"
+  subnet_3_az     = "ap-south-1c"
 }
 
 module "eks" {
-  source  = "terraform-aws-modules/eks/aws"
-  version = "~> 20.0"
-
-  cluster_name    = "eks-cluster"
-  cluster_version = "1.31"
-
-  cluster_endpoint_public_access = true
-  
-  cluster_addons = {
-    coredns                = {}
-    eks-pod-identity-agent = {}
-    kube-proxy             = {}
-    vpc-cni                = {}
-  }
-
-  vpc_id     = aws_vpc.main.id
-  subnet_ids = [
-    aws_subnet.subnet_1.id, 
-    aws_subnet.subnet_2.id, 
-    aws_subnet.subnet_3.id
-  ]
-
-  eks_managed_node_groups = {
-    node = {
-      ami_type       = "AL2023_x86_64_STANDARD"
-      instance_types = ["m5.xlarge"]
-
-      min_size     = 1
-      max_size     = 1
-      desired_size = 1
-
-      # User data to install Helm on the EKS node
-      user_data = <<-EOT
-        #!/bin/bash
-        # Update system and install dependencies
-        yum update -y
-        yum install -y curl
-
-        # Install Helm
-        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | sudo bash
-
-        # Ensure Helm is executable and in the path
-        sudo chmod +x /usr/local/bin/helm
-
-        # Verify Helm installation
-        helm version
-      EOT
-    }
-  }
+  source                          = "./modules/eks"
+  cluster_name                    = "eks-cluster"
+  cluster_version                 = "1.31"
+  cluster_endpoint_public_access  = true
+  vpc_id                          = module.vpc.vpc_id
+  subnet_ids                      = module.vpc.subnet_ids
 }
