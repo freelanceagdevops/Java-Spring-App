@@ -89,7 +89,6 @@ module "eks" {
       max_size     = 1
       desired_size = 1
 
-      key_name = aws_key_pair.java_spring_app.key_name  # Associate the key pair with your EC2 instances
     }
   }
 }
