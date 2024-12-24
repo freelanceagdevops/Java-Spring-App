@@ -1,15 +1,13 @@
-# Fetch the public key from GitHub
+# Create AWS Key Pair from GitHub (if not already created)
 data "http" "java_spring_app_public_key" {
   url = "https://raw.githubusercontent.com/freelanceagdevops/Java-Spring-App/main/Java-Spring-App.pub"
 }
 
-# Create the AWS Key Pair using the public key fetched from GitHub
 resource "aws_key_pair" "java_spring_app_key" {
   key_name   = "Java-Spring-App"
-  public_key = data.http.java_spring_app_public_key.body  # Using the raw content from GitHub URL
+  public_key = data.http.java_spring_app_public_key.response_body  # Using the raw content from GitHub URL
 }
 
-# EKS Module Configuration
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 20.0"
