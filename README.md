@@ -97,15 +97,17 @@ Pre-requisites
 - `AWS account with permissions to create EKS resources`.
 - `AWS CLI installed and configured on your local machine`.
 - `kubectl installed for Kubernetes cluster management`.
-###########################################################################################################
+#######################################################################################################
 
 Step 1: Create GitHub Repositories
+
 1.1. Create Infrastructure Repository
 - `Create a GitHub repository called infrastructure to store Terraform configurations.`
 - `Initialize the repository with a README.md file.`
-###########################################################################################################
+########################################################################################################
 
 Step 2: Configure GitHub Secrets
+
 2.1. GitHub Secrets Setup
 To authenticate GitHub Actions with AWS for infrastructure deployment:
 
