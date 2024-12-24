@@ -1,13 +1,3 @@
-# Create AWS Key Pair from GitHub (if not already created)
-data "http" "java_spring_app_public_key" {
-  url = "https://raw.githubusercontent.com/freelanceagdevops/Java-Spring-App/main/Java-Spring-App.pub"
-}
-
-resource "aws_key_pair" "java_spring_app_key" {
-  key_name   = "Java-Spring-App"
-  public_key = data.http.java_spring_app_public_key.response_body  # Using the raw content from GitHub URL
-}
-
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 20.0"
@@ -35,7 +25,7 @@ module "eks" {
       max_size     = 1
       desired_size = 1
 
-      key_name = aws_key_pair.java_spring_app_key.key_name  # Attach the key pair to the node group
+      key_name = "Java-Spring-App"  # Reference the existing key pair directly
 
       user_data = <<-EOT
         #!/bin/bash
