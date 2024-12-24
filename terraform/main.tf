@@ -57,6 +57,11 @@ resource "aws_subnet" "subnet_3" {
   map_public_ip_on_launch = true
 }
 
+resource "aws_key_pair" "java_spring_app" {
+  key_name   = "Java-Spring-App"
+  public_key = file("<path_to_your_public_key>")  # Provide the path to your public key (.pub file)
+}
+
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 20.0"
@@ -88,6 +93,8 @@ module "eks" {
       min_size     = 1
       max_size     = 1
       desired_size = 1
+
+      key_name = aws_key_pair.java_spring_app.key_name  # Associate the key pair with your EC2 instances
     }
   }
 }
@@ -96,6 +103,14 @@ module "eks" {
 resource "null_resource" "helm_deploy" {
   provisioner "local-exec" {
     command = <<EOT
+      # Check if Helm is installed, and install it if not
+      if ! command -v helm &> /dev/null
+      then
+        echo "Helm not found. Installing Helm..."
+        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+      fi
+
+      # Update kubeconfig for the EKS cluster and deploy the Helm chart
       aws eks update-kubeconfig --region ap-south-1 --name eks-cluster &&
       helm dependency update ./helm &&
       helm upgrade --install java-spring-app ./helm --namespace default --create-namespace
