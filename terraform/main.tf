@@ -81,7 +81,7 @@ module "eks" {
   ]
 
   eks_managed_node_groups = {
-    green = {
+    node = {
       ami_type       = "AL2023_x86_64_STANDARD"
       instance_types = ["m5.xlarge"]
 
@@ -90,7 +90,17 @@ module "eks" {
       desired_size = 1
     }
   }
-
 }
 
+# Null resource for Helm chart deployment
+resource "null_resource" "helm_deploy" {
+  provisioner "local-exec" {
+    command = <<EOT
+      aws eks update-kubeconfig --region ap-south-1 --name eks-cluster &&
+      helm dependency update ./helm &&
+      helm upgrade --install java-spring-app ./helm --namespace default --create-namespace
+    EOT
+  }
 
+  depends_on = [module.eks]
+}
