@@ -94,7 +94,6 @@ module "eks" {
   }
 }
 
-# Null resource for Helm chart deployment
 resource "null_resource" "helm_deploy" {
   provisioner "local-exec" {
     command = <<EOT
@@ -109,13 +108,13 @@ resource "null_resource" "helm_deploy" {
           echo "Error: Helm was not installed properly at $HELM_PATH"
           exit 1
         fi
-        # Add Helm to PATH permanently
+        # Add Helm to PATH in this session for future commands
         export PATH=$PATH:/usr/local/bin
       fi
 
-      # Update kubeconfig for the EKS cluster and deploy the Helm chart
-      aws eks update-kubeconfig --region ap-south-1 --name eks-cluster &&
-      
+      # Update kubeconfig for the EKS cluster
+      aws eks update-kubeconfig --region ap-south-1 --name eks-cluster
+
       # Use full path to helm to avoid any PATH issues
       /usr/local/bin/helm dependency update ./helm &&
       /usr/local/bin/helm upgrade --install java-spring-app ./helm --namespace default --create-namespace
