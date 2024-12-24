@@ -57,11 +57,6 @@ resource "aws_subnet" "subnet_3" {
   map_public_ip_on_launch = true
 }
 
-resource "aws_key_pair" "java_spring_app" {
-  key_name   = "Java-Spring-App"
-  public_key = file("<path_to_your_public_key>")  # Provide the path to your public key (.pub file)
-}
-
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 20.0"
