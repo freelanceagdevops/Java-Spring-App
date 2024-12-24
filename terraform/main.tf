@@ -101,7 +101,7 @@ resource "null_resource" "helm_deploy" {
       if ! command -v helm &> /dev/null
       then
         echo "Helm not found. Installing Helm..."
-        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | sudo bash
 
         # Ensure Helm is installed in /usr/local/bin
         HELM_PATH=/usr/local/bin/helm
@@ -111,8 +111,8 @@ resource "null_resource" "helm_deploy" {
         fi
       fi
 
-      # Ensure Helm binary is executable
-      chmod +x /usr/local/bin/helm
+      # Ensure Helm binary is executable (use sudo to change permissions)
+      sudo chmod +x /usr/local/bin/helm
 
       # Update kubeconfig for the EKS cluster
       aws eks update-kubeconfig --region ap-south-1 --name eks-cluster
