@@ -93,7 +93,7 @@ This guide provides a comprehensive walkthrough for setting up a GitOps workflow
 Step-by-step instructions :
 
 Pre-requisites
-- 'GitHub account to create repositories`.
+- `GitHub account to create repositories`.
 - `AWS account with permissions to create EKS resources`.
 - `AWS CLI installed and configured on your local machine`.
 - `kubectl installed for Kubernetes cluster management`.
