@@ -100,7 +100,7 @@ Pre-requisites
 ###########################################################################################################
 
 Step 1: Create GitHub Repositories
-1.1. - `Create Infrastructure Repository`
+1.1. Create Infrastructure Repository
 - `Create a GitHub repository called infrastructure to store Terraform configurations.`
 - `Initialize the repository with a README.md file.`
 ###########################################################################################################
