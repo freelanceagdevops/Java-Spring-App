@@ -120,17 +120,12 @@ resource "null_resource" "helm_deploy" {
       # Print the PATH to debug if Helm is not found
       echo "PATH: $PATH"
 
-      # Verify if Helm is installed correctly
-      if ! /usr/local/bin/helm version &> /dev/null; then
-        echo "Error: Helm is not available at /usr/local/bin/helm"
-        exit 1
-      fi
-
-      # Verify Helm version again to ensure it’s accessible in the current environment
+      # Ensure the shell environment is loaded and Helm is accessible
+      echo "Verifying Helm installation..."
       /usr/local/bin/helm version
 
       # Update kubeconfig for the EKS cluster
-      aws eks update-kubeconfig --region ap-south-1 --name eks-cluster
+      aws eks update-kubeconfig --region *** --name eks-cluster
 
       # Use full path for helm to avoid PATH issues
       /usr/local/bin/helm dependency update ./helm &&
