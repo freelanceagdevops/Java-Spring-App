@@ -97,39 +97,48 @@ module "eks" {
 resource "null_resource" "helm_deploy" {
   provisioner "local-exec" {
     command = <<EOT
-      # Check if Helm is installed, and install it if not
-      if ! command -v helm &> /dev/null
-      then
-        echo "Helm not found. Installing Helm..."
-        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | sudo bash
+      # Start a new shell session to ensure PATH is updated
+      bash -c '
+        # Check if Helm is installed, and install it if not
+        if ! command -v helm &> /dev/null
+        then
+          echo "Helm not found. Installing Helm..."
+          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | sudo bash
 
-        # Ensure Helm is installed in /usr/local/bin
-        HELM_PATH="/usr/local/bin/helm"
-        if [ ! -f "$HELM_PATH" ]; then
-          echo "Error: Helm was not installed properly at $HELM_PATH"
+          # Ensure Helm is installed in /usr/local/bin
+          HELM_PATH="/usr/local/bin/helm"
+          if [ ! -f "$HELM_PATH" ]; then
+            echo "Error: Helm was not installed properly at $HELM_PATH"
+            exit 1
+          fi
+        fi
+
+        # Ensure Helm binary is executable (use sudo to change permissions)
+        sudo chmod +x /usr/local/bin/helm
+
+        # Explicitly add /usr/local/bin to the PATH for the current session
+        export PATH=$PATH:/usr/local/bin
+
+        # Print the PATH to debug if Helm is not found
+        echo "PATH: $PATH"
+
+        # Verify if Helm is installed correctly
+        if ! command -v helm &> /dev/null
+        then
+          echo "Error: Helm is not available in the PATH"
           exit 1
         fi
-      fi
 
-      # Ensure Helm binary is executable (use sudo to change permissions)
-      sudo chmod +x /usr/local/bin/helm
+        # Verify Helm version
+        helm version
 
-      # Explicitly add /usr/local/bin to the PATH for the current session
-      export PATH=$PATH:/usr/local/bin
+        # Update kubeconfig for the EKS cluster
+        aws eks update-kubeconfig --region *** --name eks-cluster
 
-      # Print the PATH to debug if Helm is not found
-      echo "PATH: $PATH"
-
-      # Ensure the shell environment is loaded and Helm is accessible
-      echo "Verifying Helm installation..."
-      /usr/local/bin/helm version
-
-      # Update kubeconfig for the EKS cluster
-      aws eks update-kubeconfig --region *** --name eks-cluster
-
-      # Use full path for helm to avoid PATH issues
-      /usr/local/bin/helm dependency update ./helm &&
-      /usr/local/bin/helm upgrade --install java-spring-app ./helm --namespace default --create-namespace
+        # Use full path for helm to avoid PATH issues
+        /usr/local/bin/helm dependency update ./helm &&
+        /usr/local/bin/helm upgrade --install java-spring-app ./helm --namespace default --create-namespace
+      '
     EOT
   }
 
